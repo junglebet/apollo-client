@@ -1,7 +1,2 @@
 .docs
 .vscode
-!dist
-!.nuxt
-!playground/.nuxt
-!.output
-!.env

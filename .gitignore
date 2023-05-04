@@ -5,7 +5,7 @@ node_modules
 .idea
 .vscode
 .DS_Store
-dist
+#dist
 coverage
 .nuxt
 .output
