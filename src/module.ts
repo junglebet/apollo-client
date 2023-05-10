@@ -4,7 +4,6 @@ import { Ref } from 'vue'
 import { defu } from 'defu'
 import { useLogger, addPlugin, addImports, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import GraphQLPlugin from '@rollup/plugin-graphql'
-import { ApolloLink } from '@apollo/client/core'
 import { name, version } from '../package.json'
 import type { ClientConfig, NuxtApolloConfig, ErrorResponse } from './types'
 
