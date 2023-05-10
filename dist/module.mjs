@@ -24,6 +24,7 @@ const module = defineNuxtModule({
     autoImports: true,
     authType: "Bearer",
     authHeader: "Authorization",
+    csrfHeader: "X-CSRF-TOKEN",
     tokenStorage: "cookie",
     proxyCookies: true,
     cookieAttributes: {
@@ -64,6 +65,7 @@ const module = defineNuxtModule({
         }
         v.authType = v?.authType || (v?.authType === "" || v?.authType === null) ? null : options.authType;
         v.authHeader = v?.authHeader || options.authHeader;
+        v.csrfHeader = v?.csrfHeader || options.csrfHeader;
         v.tokenName = v?.tokenName || `apollo:${k}.token`;
         v.tokenStorage = v?.tokenStorage || options.tokenStorage;
         if (v.cookieAttributes) {

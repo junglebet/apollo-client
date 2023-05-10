@@ -1,5 +1,5 @@
 import type { ClientOptions } from 'graphql-ws'
-import type { ApolloClient, HttpOptions, DefaultOptions, InMemoryCacheConfig } from '@apollo/client'
+import type { ApolloClient, HttpOptions, DefaultOptions, InMemoryCacheConfig, ApolloLink, RequestHandler } from '@apollo/client'
 import type { CookieOptions } from 'nuxt/dist/app/composables'
 import type { RestartableClient } from './runtime/ws'
 export type { ErrorResponse } from '@apollo/client/link/error'
@@ -106,6 +106,13 @@ export type ClientConfig = {
    * Configuration for the auth cookie.
    **/
   cookieAttributes?: CookieAttributes;
+
+  /**
+   * Name of the CSRF token header.
+   * @type {string}
+   * @default "X-CSRF-TOKEN"
+   */
+  csrfHeader?: string
 };
 
 export interface NuxtApolloConfig<T = ClientConfig> {
@@ -148,6 +155,13 @@ export interface NuxtApolloConfig<T = ClientConfig> {
    * @default "Authorization"
    */
   authHeader?: string;
+
+  /**
+   * Name of the CSRF token header.
+   * @type {string}
+   * @default "X-CSRF-TOKEN"
+   */
+  csrfHeader?: string;
 
   /**
    * Specify if the auth token should be stored in `cookie` or `localStorage`.

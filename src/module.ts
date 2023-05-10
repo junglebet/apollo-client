@@ -4,6 +4,7 @@ import { Ref } from 'vue'
 import { defu } from 'defu'
 import { useLogger, addPlugin, addImports, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import GraphQLPlugin from '@rollup/plugin-graphql'
+import { ApolloLink } from '@apollo/client/core'
 import { name, version } from '../package.json'
 import type { ClientConfig, NuxtApolloConfig, ErrorResponse } from './types'
 
@@ -30,6 +31,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
     autoImports: true,
     authType: 'Bearer',
     authHeader: 'Authorization',
+    csrfHeader: 'X-CSRF-TOKEN',
     tokenStorage: 'cookie',
     proxyCookies: true,
     cookieAttributes: {
@@ -75,6 +77,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
 
         v.authType = v?.authType || (v?.authType === '' || v?.authType === null) ? null : options.authType
         v.authHeader = v?.authHeader || options.authHeader
+        v.csrfHeader = v?.csrfHeader || options.csrfHeader
         v.tokenName = v?.tokenName || `apollo:${k}.token`
         v.tokenStorage = v?.tokenStorage || options.tokenStorage
         if (v.cookieAttributes) { v.cookieAttributes = defu(v?.cookieAttributes, options.cookieAttributes) }
@@ -201,5 +204,6 @@ declare module '#app' {
   interface RuntimeNuxtHooks {
     'apollo:auth': (params: { client: string, token: Ref<string | null> }) => void
     'apollo:error': (error: ErrorResponse) => void
+    'apollo:csrf': (params: { client: string, token: Ref<string | null> }) => void
   }
 }

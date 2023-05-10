@@ -103,6 +103,13 @@ type ClientConfig = {
    * Configuration for the auth cookie.
    **/
   cookieAttributes?: CookieAttributes;
+
+  /**
+   * Name of the CSRF token header.
+   * @type {string}
+   * @default "X-CSRF-TOKEN"
+   */
+  csrfHeader?: string
 };
 
 interface NuxtApolloConfig<T = ClientConfig> {
@@ -147,6 +154,13 @@ interface NuxtApolloConfig<T = ClientConfig> {
   authHeader?: string;
 
   /**
+   * Name of the CSRF token header.
+   * @type {string}
+   * @default "X-CSRF-TOKEN"
+   */
+  csrfHeader?: string;
+
+  /**
    * Specify if the auth token should be stored in `cookie` or `localStorage`.
    * `Cookie` storage is required for SSR.
    * @type {string}
@@ -186,6 +200,10 @@ declare module '#app' {
             token: Ref<string | null>;
         }) => void;
         'apollo:error': (error: ErrorResponse) => void;
+        'apollo:csrf': (params: {
+            client: string;
+            token: Ref<string | null>;
+        }) => void;
     }
 }
 

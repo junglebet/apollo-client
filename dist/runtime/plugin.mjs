@@ -49,7 +49,25 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
       };
     });
-    const httpLink = authLink.concat(createHttpLink({
+    const getCsrfToken = async () => {
+      const token = ref();
+      await nuxtApp.callHook("apollo:csrf", { token, client: key });
+      return token.value;
+    };
+    const csrfLink = setContext(async (_, { headers }) => {
+      const token = await getCsrfToken();
+      if (!token) {
+        return;
+      }
+      return {
+        headers: {
+          ...headers,
+          ...requestCookies && requestCookies,
+          [clientConfig.csrfHeader]: token
+        }
+      };
+    });
+    const httpLink = csrfLink.concat(authLink).concat(createHttpLink({
       ...clientConfig?.httpLinkOptions && clientConfig.httpLinkOptions,
       uri: process.client && clientConfig.browserHttpEndpoint || clientConfig.httpEndpoint,
       headers: { ...clientConfig?.httpLinkOptions?.headers || {} }
@@ -61,10 +79,14 @@ export default defineNuxtPlugin((nuxtApp) => {
         url: clientConfig.wsEndpoint,
         connectionParams: async () => {
           const auth = await getAuth();
-          if (!auth) {
+          const csrf = await getCsrfToken();
+          if (!auth && !csrf) {
             return;
           }
-          return { [clientConfig.authHeader]: auth };
+          return {
+            ...auth ? { [clientConfig.authHeader]: auth } : {},
+            ...csrf ? { [clientConfig.csrfHeader]: csrf } : {}
+          };
         }
       });
       wsLink = new GraphQLWsLink(wsClient);

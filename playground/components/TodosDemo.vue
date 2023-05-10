@@ -6,7 +6,7 @@
       </div>
 
       <div class="flex flex-wrap gap-3 items-center">
-        <NButton @click="refresh">
+        <NButton @click="loadTodos">
           Load Todos
         </NButton>
 
@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+
 const gqlTodos = gql`query todo { todos { id text } }`
 const gqlCreateTodo = gql`mutation createTodo($todo: TodoInput!) { createTodo(todo: $todo) { id } }`
 const gqlTodoAdded = gql`subscription todoAdded { todoAdded { id text } }`
@@ -61,5 +62,8 @@ function todoAdded () {
   onError((e) => {
     console.log(e)
   })
+}
+function loadTodos () {
+  refresh()
 }
 </script>
