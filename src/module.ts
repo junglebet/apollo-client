@@ -4,6 +4,7 @@ import { Ref } from 'vue'
 import { defu } from 'defu'
 import { useLogger, addPlugin, addImports, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import GraphQLPlugin from '@rollup/plugin-graphql'
+import type { DefaultContext } from '@apollo/client/core'
 import { name, version } from '../package.json'
 import type { ClientConfig, NuxtApolloConfig, ErrorResponse } from './types'
 
@@ -204,5 +205,6 @@ declare module '#app' {
     'apollo:auth': (params: { client: string, token: Ref<string | null> }) => void
     'apollo:error': (error: ErrorResponse) => void
     'apollo:csrf': (params: { client: string, token: Ref<string | null> }) => void
+    'apollo:link': (params: { client: string, context: Ref<DefaultContext | null>, prevContextContext: DefaultContext | null }) => void
   }
 }

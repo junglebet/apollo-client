@@ -67,7 +67,15 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
       };
     });
-    const httpLink = csrfLink.concat(authLink).concat(createHttpLink({
+    const contextLink = setContext(async (_, prevContext) => {
+      const context = ref(null);
+      await nuxtApp.callHook("apollo:link", { prevContext, context, client: key });
+      if (!context.value) {
+        return;
+      }
+      return context.value;
+    });
+    const httpLink = csrfLink.concat(authLink).concat(contextLink).concat(createHttpLink({
       ...clientConfig?.httpLinkOptions && clientConfig.httpLinkOptions,
       uri: process.client && clientConfig.browserHttpEndpoint || clientConfig.httpEndpoint,
       headers: { ...clientConfig?.httpLinkOptions?.headers || {} }

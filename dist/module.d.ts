@@ -1,5 +1,6 @@
 import * as _nuxt_schema from '@nuxt/schema';
 import { Ref } from 'vue';
+import { DefaultContext } from '@apollo/client/core';
 import { ClientOptions } from 'graphql-ws';
 import { HttpOptions, DefaultOptions, InMemoryCacheConfig } from '@apollo/client';
 import { CookieOptions } from 'nuxt/dist/app/composables';
@@ -203,6 +204,11 @@ declare module '#app' {
         'apollo:csrf': (params: {
             client: string;
             token: Ref<string | null>;
+        }) => void;
+        'apollo:link': (params: {
+            client: string;
+            context: Ref<DefaultContext | null>;
+            prevContextContext: DefaultContext | null;
         }) => void;
     }
 }

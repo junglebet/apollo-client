@@ -2,7 +2,7 @@ import destr from 'destr'
 import { onError } from '@apollo/client/link/error'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { ApolloClients, provideApolloClients } from '@vue/apollo-composable'
-import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, split } from '@apollo/client/core'
+import { ApolloClient, ApolloLink, createHttpLink, DefaultContext, InMemoryCache, split } from '@apollo/client/core'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { setContext } from '@apollo/client/link/context'
 import createRestartableClient from './ws'
@@ -78,7 +78,16 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
     })
 
-    const httpLink = csrfLink.concat(authLink).concat(createHttpLink({
+    const contextLink = setContext(async (_, prevContext: DefaultContext) => {
+      const context = ref<null | DefaultContext>(null)
+      await nuxtApp.callHook('apollo:link', { prevContext, context, client: key })
+
+      if (!context.value) { return }
+
+      return context.value
+    })
+
+    const httpLink = csrfLink.concat(authLink).concat(contextLink).concat(createHttpLink({
       ...(clientConfig?.httpLinkOptions && clientConfig.httpLinkOptions),
       uri: (process.client && clientConfig.browserHttpEndpoint) || clientConfig.httpEndpoint,
       headers: { ...(clientConfig?.httpLinkOptions?.headers || {}) }
