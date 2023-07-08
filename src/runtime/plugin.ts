@@ -3,6 +3,8 @@ import { onError } from '@apollo/client/link/error'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { ApolloClients, provideApolloClients } from '@vue/apollo-composable'
 import { ApolloClient, ApolloLink, createHttpLink, DefaultContext, InMemoryCache, split } from '@apollo/client/core'
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+import { sha256 } from 'crypto-hash';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { setContext } from '@apollo/client/link/context'
 import createRestartableClient from './ws'
@@ -86,8 +88,15 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       return context.value
     })
+    let baseLink = csrfLink.concat(authLink).concat(contextLink)
 
-    const httpLink = csrfLink.concat(authLink).concat(contextLink).concat(createHttpLink({
+    // add persistedQueryLink if enabled
+    if (clientConfig.persistedQueries) {
+      const persistedLink = createPersistedQueryLink({ sha256, useGETForHashedQueries: true })
+      baseLink = baseLink.concat(persistedLink)
+    }
+
+    const httpLink = baseLink.concat(createHttpLink({
       ...(clientConfig?.httpLinkOptions && clientConfig.httpLinkOptions),
       uri: (process.client && clientConfig.browserHttpEndpoint) || clientConfig.httpEndpoint,
       headers: { ...(clientConfig?.httpLinkOptions?.headers || {}) }

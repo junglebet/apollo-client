@@ -1,15 +1,6 @@
 import { ApolloLink } from '@apollo/client/core'
 import { defineApolloClient } from '@nuxtjs/apollo'
 
-const csrfLink = () => new ApolloLink((operation, forward) => {
-  operation.setContext(() => ({
-    headers: {
-      'X-CUSTOM-HEADER': 'custom1'
-    }
-  }))
-  return forward(operation)
-})
-
 export default defineApolloClient({
   // The GraphQL endpoint.
   httpEndpoint: 'https://spacex-api-2gl6xp7kua-ue.a.run.app/query',
@@ -36,5 +27,6 @@ export default defineApolloClient({
 
   // Specify if the client should solely use WebSocket.
   // requires `wsEndpoint`.
-  websocketsOnly: false
+  websocketsOnly: false,
+  persistedQueries: true
 })

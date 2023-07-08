@@ -16,6 +16,7 @@ importers:
       '@rollup/plugin-graphql': ^2.0.3
       '@types/node': ^18.15.3
       '@vue/apollo-composable': 4.0.0-beta.4
+      crypto-hash: ^2.0.1
       defu: ^6.1.2
       destr: ^1.2.2
       eslint: ^8.36.0
@@ -30,6 +31,7 @@ importers:
       '@nuxt/kit': 3.3.1
       '@rollup/plugin-graphql': 2.0.3_graphql@16.6.0
       '@vue/apollo-composable': 4.0.0-beta.4_ln2d5caovca7u46kpv26o6jc3i
+      crypto-hash: 2.0.1
       defu: 6.1.2
       destr: 1.2.2
       graphql: 16.6.0
@@ -2699,6 +2701,11 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypto-hash/2.0.1:
+    resolution: {integrity: sha512-t4mkp7Vh6MuCZRBf0XLzBOfhkH3nW6YEAotMDSjshVQ1GffCMGdPLSr7pKH0rdXY02jTjAZ7QW2apD0buaZXcQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
 
   /css-declaration-sorter/6.3.1_postcss@8.4.21:
     resolution: {integrity: sha512-fBffmak0bPAnyqc/HO8C3n2sHrp9wcqQz6ES9koRF2/mLOVAx9zIQ3Y7R29sYCteTPqMCwns4WYQoCX91Xl3+w==}

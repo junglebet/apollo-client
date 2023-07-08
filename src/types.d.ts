@@ -113,6 +113,13 @@ export type ClientConfig = {
    * @default "X-CSRF-TOKEN"
    */
   csrfHeader?: string
+
+  /**
+   * Enable automatic persisted queries.
+   * @type {boolean}
+   * @default false
+   */
+  persistedQueries?: boolean
 };
 
 export interface NuxtApolloConfig<T = ClientConfig> {
