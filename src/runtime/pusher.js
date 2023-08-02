@@ -58,9 +58,11 @@ class PusherLink extends ApolloLink {
   }
 
   subscribeToChannel (subscriptionChannel, observer) {
+    console.log('subscribeToChannel', subscriptionChannel)
     this.pusher
       .subscribe(subscriptionChannel)
       .bind('lighthouse-subscription', (payload) => {
+        console.log('lighthouse-subscription', payload)
         if (!payload.more) {
           this.unsubscribeFromChannel(subscriptionChannel)
 
