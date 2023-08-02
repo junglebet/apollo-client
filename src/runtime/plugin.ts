@@ -97,12 +97,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       const persistedLink = createPersistedQueryLink({ sha256, useGETForHashedQueries: true })
       baseLink = baseLink.concat(persistedLink)
     }
-
-    const httpLink = baseLink.concat(createHttpLink({
+    const httpEndLink = createHttpLink({
       ...(clientConfig?.httpLinkOptions && clientConfig.httpLinkOptions),
       uri: (process.client && clientConfig.browserHttpEndpoint) || clientConfig.httpEndpoint,
       headers: { ...(clientConfig?.httpLinkOptions?.headers || {}) }
-    }))
+    })
+    const httpLink = baseLink.concat(httpEndLink)
 
     let wsLink: GraphQLWsLink | null = null
 
@@ -137,7 +137,17 @@ export default defineNuxtPlugin((nuxtApp) => {
           cluster: clientConfig.pusher.cluster,
           channelAuthorization: {
             endpoint: clientConfig.pusher.channelEndpoint,
-            transport: 'ajax'
+            transport: 'ajax',
+            headersProvider () {
+              try {
+                const { token } = nuxtApp.$csrfToken()
+                return {
+                  [clientConfig.csrfHeader!]: token.value
+                }
+              } catch (e) {
+                return {}
+              }
+            }
           }
         })
       })
@@ -149,8 +159,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     const link = pusherLink
       ? ApolloLink.from([
         errorLink,
+        baseLink,
         pusherLink,
-        httpLink
+        httpEndLink
       ])
       : ApolloLink.from([
         errorLink,

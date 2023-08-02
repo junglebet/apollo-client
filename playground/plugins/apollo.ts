@@ -3,7 +3,24 @@ import type { ErrorResponse } from '@nuxtjs/apollo'
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
   const csrfToken = ref<false | string>(false)
-
+  nuxtApp.provide('csrfToken', () => {
+    const onReady = (fn: (token: string) => void) => {
+      const stopWatch = watch(
+        () => csrfToken.value,
+        (token) => {
+          if (token) {
+            fn(token)
+          }
+        },
+        { immediate: true }
+      )
+      return stopWatch
+    }
+    return {
+      token: csrfToken,
+      onReady
+    }
+  })
   const fetchCsrf =
     fetch(`${config.public.graphqlBaseUrl}/auth/csrf-token`, {
       credentials: 'include'
