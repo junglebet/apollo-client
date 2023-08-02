@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   },
 
   apollo: {
+    proxyCookies: true,
     clients: {
       default: './apollo/default.ts',
       github: {
@@ -29,7 +30,24 @@ export default defineNuxtConfig({
         },
         // NOTE: `X-CSRF-TOKEN` is default csrfHeader
         csrfHeader: 'X-CSRF-TOKEN'
+      },
+      gamba: {
+        httpEndpoint: `${process.env.GRAPHQL_BASE_URL}/@`,
+        httpLinkOptions: {
+          credentials: 'include'
+        },
+        persistedQueries: false,
+        pusher: {
+          cluster: process.env.PUSHER_CLUSTER!,
+          channelEndpoint: '/broadcasting/auth',
+          pusherAppKey: process.env.PUSHER_APP_KEY!
+        }
       }
+    }
+  },
+  runtimeConfig: {
+    public: {
+      graphqlBaseUrl: process.env.GRAPHQL_BASE_URL
     }
   }
 })

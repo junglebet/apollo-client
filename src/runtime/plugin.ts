@@ -7,8 +7,10 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { sha256 } from 'crypto-hash';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { setContext } from '@apollo/client/link/context'
+import Pusher from 'pusher-js'
 import createRestartableClient from './ws'
 import { useApollo } from './composables'
+import PusherLink from './pusher'
 import { ref, useCookie, defineNuxtPlugin, useRequestHeaders } from '#imports'
 
 import NuxtApollo from '#apollo'
@@ -127,27 +129,46 @@ export default defineNuxtPlugin((nuxtApp) => {
       nuxtApp._apolloWsClients[key] = wsClient
     }
 
+    let pusherLink: PusherLink | null = null
+
+    if (process.client && clientConfig.pusher) {
+      pusherLink = new PusherLink({
+        pusher: new Pusher(clientConfig.pusher.pusherAppKey, {
+          cluster: clientConfig.pusher.cluster,
+          channelAuthorization: {
+            endpoint: clientConfig.pusher.channelEndpoint,
+            transport: 'jsonp'
+          }
+        })
+      })
+    }
     const errorLink = onError((err) => {
       nuxtApp.callHook('apollo:error', err)
     })
 
-    const link = ApolloLink.from([
-      errorLink,
-      ...(!wsLink
-        ? [httpLink]
-        : [
-            ...(clientConfig?.websocketsOnly
-              ? [wsLink]
-              : [
-                  split(({ query }) => {
-                    const definition = getMainDefinition(query)
-                    return (definition.kind === 'OperationDefinition' && definition.operation === 'subscription')
-                  },
-                  wsLink,
-                  httpLink)
-                ])
-          ])
-    ])
+    const link = pusherLink
+      ? ApolloLink.from([
+        errorLink,
+        pusherLink,
+        httpLink
+      ])
+      : ApolloLink.from([
+        errorLink,
+        ...(!(wsLink)
+          ? [httpLink]
+          : [
+              ...(clientConfig?.websocketsOnly
+                ? [wsLink]
+                : [
+                    split(({ query }) => {
+                      const definition = getMainDefinition(query)
+                      return (definition.kind === 'OperationDefinition' && definition.operation === 'subscription')
+                    },
+                    wsLink,
+                    httpLink)
+                  ])
+            ])
+      ])
 
     const cache = new InMemoryCache(clientConfig.inMemoryCacheOptions)
 

@@ -33,6 +33,9 @@
         <template v-else-if="api === 'users'">
           <UsersDemo />
         </template>
+        <template v-else-if="api === 'gamba'">
+          <GambaDemo />
+        </template>
       </div>
     </main>
 
@@ -43,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-const apis = ref(['starlink', 'todos', 'github', 'users'])
+const apis = ref(['starlink', 'todos', 'github', 'users', 'gamba'])
 
 const apiCookie = useCookie('apollo_api', { default: () => apis.value[0] })
 const api = ref(apiCookie.value)

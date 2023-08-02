@@ -11,6 +11,12 @@ export type NuxtAppApollo = Partial<{
   _apolloWsClients?: Record<string, RestartableClient>;
 }>;
 
+export type Pusher = {
+  cluster: string;
+  channelEndpoint: string;
+  pusherAppKey: string;
+}
+
 export type ClientConfig = {
   /**
    * The GraphQL endpoint.
@@ -44,9 +50,6 @@ export type ClientConfig = {
    **/
   wsEndpoint?: string;
 
-  // Enable Automatic Query persisting with Apollo Engine
-  // persisting?: boolean
-
   /**
    * Specify if the client should solely use WebSocket.
    * requires `wsEndpoint`.
@@ -54,6 +57,12 @@ export type ClientConfig = {
    * @default false
    **/
   websocketsOnly?: boolean;
+
+  /**
+   * Specify a pusher config to be used for subscriptions.
+   * @type {Pusher}
+   **/
+  pusher?: Pusher
 
   /**
    * Specify if the client should be able to connect to the Apollo Client Devtools in production mode.
