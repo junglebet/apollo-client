@@ -19,7 +19,7 @@
   "scripts": {
     "build": "nuxt-module-build",
     "prepack": "pnpm build",
-    "dev": "nuxi dev playground",
+    "dev": "nuxi dev playground --dotenv .env.local",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
     "release": "standard-version --prerelease alpha && git push --follow-tags && pnpm publish --tag next"
