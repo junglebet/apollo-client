@@ -56,6 +56,7 @@ function liveBetSubscribe () {
   const { onResult, onError } = useSubscription(gqlLiveBet, null, { clientId: 'gamba' })
 
   onResult((r) => {
+    console.log('new result received', r)
     data.value = r.data as any
   })
 

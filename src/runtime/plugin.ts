@@ -135,20 +135,24 @@ export default defineNuxtPlugin((nuxtApp) => {
       pusherLink = new PusherLink({
         pusher: new Pusher(clientConfig.pusher.pusherAppKey, {
           cluster: clientConfig.pusher.cluster,
+          wsHost: '6001-gambalabs-backend-o0i37lud0oj.ws-us102.gitpod.io',
+          wsPort: 6001,
           channelAuthorization: {
             endpoint: clientConfig.pusher.channelEndpoint,
-            transport: 'ajax',
             headersProvider () {
               try {
                 const { token } = nuxtApp.$csrfToken()
                 return {
-                  [clientConfig.csrfHeader!]: token.value
+                  'X-CSRF-Token': token.value
                 }
               } catch (e) {
                 return {}
               }
             }
-          }
+          },
+          forceTLS: false,
+          disableStats: true,
+          enabledTransports: ['ws']
         })
       })
     }
