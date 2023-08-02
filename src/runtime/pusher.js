@@ -31,7 +31,6 @@ class PusherLink extends ApolloLink {
           // If the operation has the subscription channel, it's a subscription
           subscriptionChannel =
             data?.extensions?.lighthouse_subscriptions.channel ?? null
-
           // No subscription found in the response, pipe data through
           if (!subscriptionChannel) {
             observer.next(data)
@@ -39,8 +38,8 @@ class PusherLink extends ApolloLink {
 
             return
           }
-
-          this.subscribeToChannel(subscriptionChannel, observer)
+          const event = data?.extensions?.lighthouse_subscriptions.event ?? 'lighthouse-subscription'
+          this.subscribeToChannel(subscriptionChannel, event, observer)
         }
       })
 
@@ -57,12 +56,10 @@ class PusherLink extends ApolloLink {
     return subscribeObservable
   }
 
-  subscribeToChannel (subscriptionChannel, observer) {
-    console.log('subscribeToChannel', subscriptionChannel)
+  subscribeToChannel (subscriptionChannel, event = 'lighthouse-subscription', observer) {
     this.pusher
       .subscribe(subscriptionChannel)
-      .bind('lighthouse-subscription', (payload) => {
-        console.log('lighthouse-subscription', payload)
+      .bind(event, (payload) => {
         if (!payload.more) {
           this.unsubscribeFromChannel(subscriptionChannel)
 
