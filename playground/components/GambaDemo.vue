@@ -53,7 +53,7 @@ const subscribe = ref(false)
 function liveBetSubscribe () {
   subscribe.value = true
 
-  const { onResult, onError } = useSubscription(gqlLiveBet, null, { clientId: 'gamba' })
+  const { onResult, onError, result } = useSubscription(gqlLiveBet, null, { clientId: 'gamba' })
 
   onResult((r) => {
     console.log('new result received', r)

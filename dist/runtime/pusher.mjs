@@ -65,12 +65,7 @@ class PusherLink extends ApolloLink {
 
         //   observer.complete()
         // }
-
-        const result = payload.result
-
-        if (result) {
-          observer.next(result)
-        }
+        observer.next(payload)
       })
   }
 
