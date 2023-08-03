@@ -22,7 +22,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   })
   const fetchCsrf =
-    fetch(`${config.public.graphqlBaseUrl}/auth/csrf-token`, {
+    process.client && fetch(`${config.public.graphqlBaseUrl}/auth/csrf-token`, {
       credentials: 'include'
     })
       .then(async (res) => {

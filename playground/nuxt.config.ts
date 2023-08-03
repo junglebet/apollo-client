@@ -39,7 +39,7 @@ export default defineNuxtConfig({
         persistedQueries: false,
         pusher: {
           cluster: process.env.PUSHER_CLUSTER!,
-          channelEndpoint: '/broadcasting/auth',
+          channelEndpoint: 'https://80-gambalabs-backend-o0i37lud0oj.ws-us102.gitpod.io/broadcasting/auth',
           pusherAppKey: process.env.PUSHER_APP_KEY!
         }
       }
