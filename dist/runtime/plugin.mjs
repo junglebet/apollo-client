@@ -7,7 +7,7 @@ import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries"
 import { sha256 } from "crypto-hash";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { setContext } from "@apollo/client/link/context";
-import Pusher from "pusher-js";
+import * as Pusher from "pusher-js";
 import createRestartableClient from "./ws.mjs";
 import { useApollo } from "./composables.mjs";
 import PusherLink from "./pusher.mjs";
