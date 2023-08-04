@@ -60,12 +60,15 @@ class PusherLink extends ApolloLink {
     this.pusher
       .subscribe(subscriptionChannel)
       .bind(event, (payload) => {
-        // if (!payload.more) {
-        //   this.unsubscribeFromChannel(subscriptionChannel)
+        const { result } = payload
+        if (result) {
+          observer.next(result)
+        }
+        if (!payload.more) {
+          this.unsubscribeFromChannel(subscriptionChannel)
 
-        //   observer.complete()
-        // }
-        observer.next(payload)
+          observer.complete()
+        }
       })
   }
 

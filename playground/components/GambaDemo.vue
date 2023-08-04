@@ -44,7 +44,13 @@ const gqlGames = gql`
   }
   ${gameFields}
 `
-const gqlLiveBet = gql`subscription liveBet { liveBet { channel event } }`
+const gqlLiveBet = gql`subscription liveBet {
+  liveBet {
+    action_id
+    amount
+    display_name
+  }
+}`
 
 const { result: data, refetch: refresh } = useQuery(gqlGames, { first: 5 }, { clientId: 'gamba' })
 
