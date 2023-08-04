@@ -7,7 +7,7 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { sha256 } from 'crypto-hash'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { setContext } from '@apollo/client/link/context'
-import Pusher from 'pusher-js'
+import * as Pusher from 'pusher-js'
 import createRestartableClient from './ws'
 import { useApollo } from './composables'
 import PusherLink from './pusher'
@@ -132,7 +132,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     let pusherLink: PusherLink | null = null
 
     if (process.client && clientConfig.pusher) {
-      Pusher.logToConsole = true
       pusherLink = new PusherLink({
         pusher: new Pusher('app-key', {
           wsHost: '6001-gambalabs-backend-o0i37lud0oj.ws-us102.gitpod.io',
