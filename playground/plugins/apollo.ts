@@ -2,7 +2,8 @@ import type { ErrorResponse } from '@nuxtjs/apollo'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
-  const csrfToken = ref<false | string>(false)
+  const csrfToken = ref<null | string>(null)
+  const authToken = ref<null | string>(null)
   nuxtApp.provide('csrfToken', () => {
     const onReady = (fn: (token: string) => void) => {
       const stopWatch = watch(
@@ -18,6 +19,24 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
     return {
       token: csrfToken,
+      onReady
+    }
+  })
+  nuxtApp.provide('authToken', () => {
+    const onReady = (fn: (token: string) => void) => {
+      const stopWatch = watch(
+        () => authToken.value,
+        (token) => {
+          if (token) {
+            fn(token)
+          }
+        },
+        { immediate: true }
+      )
+      return stopWatch
+    }
+    return {
+      token: authToken,
       onReady
     }
   })
@@ -41,6 +60,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     // Pass token to the `todos` client
     token.value = '<secret_token>'
+  })
+  nuxtApp.hook('apollo:auth', ({ client, token }) => {
+    if (client !== 'gamba') { return }
+
+    // Pass token to the `todos` client
+    token.value = '<secret_token>'
+    authToken.value = '<secret_token>'
   })
 
   nuxtApp.hook('apollo:csrf', async ({ client, token }) => {

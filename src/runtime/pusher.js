@@ -58,7 +58,7 @@ class PusherLink extends ApolloLink {
 
   subscribeToChannel (subscriptionChannel, event = 'lighthouse-subscription', observer) {
     this.pusher
-      .subscribe(subscriptionChannel)
+      .subscribe(`private-${subscriptionChannel}`)
       .bind(event, (payload) => {
         const { result } = payload
         if (result) {

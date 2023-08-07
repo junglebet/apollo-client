@@ -13,6 +13,9 @@
         <NButton :disabled="subscribe" @click="liveBetSubscribe">
           Subscribe
         </NButton>
+        <NButton :disabled="subscribe" @click="stopLiveBetSubscribe">
+          UnSubscribe
+        </NButton>
       </div>
     </NCard>
 
@@ -53,22 +56,24 @@ const gqlLiveBet = gql`subscription liveBet {
 }`
 
 const { result: data, refetch: refresh } = useQuery(gqlGames, { first: 5 }, { clientId: 'gamba' })
+const { onResult, onError, result, stop, start } = useSubscription(gqlLiveBet, null, { clientId: 'gamba' })
 
 const subscribe = ref(false)
 
+onResult((r) => {
+  console.log('new result received', result.value)
+  data.value = result.value
+})
+
+onError((e) => {
+  console.log(e)
+})
+
 function liveBetSubscribe () {
   subscribe.value = true
-
-  const { onResult, onError, result } = useSubscription(gqlLiveBet, null, { clientId: 'gamba' })
-
-  onResult((r) => {
-    console.log('new result received', r)
-    data.value = r.data as any
-  })
-
-  onError((e) => {
-    console.log(e)
-  })
+}
+const stopLiveBetSubscribe = () => {
+  stop()
 }
 function loadGames () {
   refresh()
