@@ -133,13 +133,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (process.client && clientConfig.pusher) {
       pusherLink = new PusherLink({
-        pusher: new Pusher('app-key', {
+        pusher: new Pusher(clientConfig.pusher.pusherAppKey, {
           wsHost: clientConfig.pusher.wsHost,
-          wsPort: 443,
-          forceTLS: true,
+          wsPort: clientConfig.pusher.wsPort,
+          forceTLS: clientConfig.pusher.forceTLS,
           disableStats: true,
-          enabledTransports: ['ws'],
-          cluster: 'mt1',
+          enabledTransports: ['ws', 'wss'],
+          cluster: clientConfig.pusher.cluster,
           channelAuthorization: {
             endpoint: clientConfig.pusher.channelEndpoint,
             headersProvider () {

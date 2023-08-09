@@ -41,7 +41,9 @@ export default defineNuxtConfig({
           wsHost: process.env.PUSHER_WS_HOST!,
           cluster: process.env.PUSHER_CLUSTER!,
           channelEndpoint: `${process.env.GRAPHQL_BASE_URL}/broadcasting/auth`,
-          pusherAppKey: process.env.PUSHER_APP_KEY!
+          pusherAppKey: process.env.PUSHER_APP_KEY!,
+          forceTLS: !!process.env.PUSHER_FORCE_TLS!,
+          wsPort: process.env.PUSHER_WS_PORT!
         }
       }
     }

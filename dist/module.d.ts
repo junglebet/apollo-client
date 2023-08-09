@@ -12,6 +12,8 @@ type CookieAttributes = Omit< CookieOptions, 'encode' | 'decode' | 'expires' | '
 type Pusher = {
   cluster: string;
   wsHost: string;
+  wsPort: number;
+  forceTLS: boolean;
   channelEndpoint: string;
   pusherAppKey: string;
 }

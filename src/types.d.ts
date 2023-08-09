@@ -14,6 +14,8 @@ export type NuxtAppApollo = Partial<{
 export type Pusher = {
   cluster: string;
   wsHost: string;
+  wsPort: number;
+  forceTLS: boolean;
   channelEndpoint: string;
   pusherAppKey: string;
 }
