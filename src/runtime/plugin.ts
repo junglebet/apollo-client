@@ -142,11 +142,10 @@ export default defineNuxtPlugin((nuxtApp) => {
           cluster: clientConfig.pusher.cluster,
           channelAuthorization: {
             endpoint: clientConfig.pusher.channelEndpoint,
-            transport: 'jsonp',
             headersProvider () {
               const { token: csrfToken } = nuxtApp.$csrfToken()
               const { token: authToken } = nuxtApp.$authToken()
-              return { 'X-CSRF-Token': csrfToken.value, authorization: `Bearer ${authToken.value}` }
+              return { 'X-CSRF-Token': csrfToken.value, authorization: `Bearer ${authToken.value}`, 'Content-Type': 'application/json' }
             }
           }
         })
