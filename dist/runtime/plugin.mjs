@@ -1,6 +1,6 @@
 import destr from "destr";
 import { onError } from "@apollo/client/link/error";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { getMainDefinition, relayStylePagination } from "@apollo/client/utilities";
 import { ApolloClients, provideApolloClients } from "@vue/apollo-composable";
 import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, split } from "@apollo/client/core";
 import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries";
@@ -126,7 +126,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             headersProvider() {
               const { token: csrfToken } = nuxtApp.$csrfToken();
               const { token: authToken } = nuxtApp.$authToken();
-              return { "X-CSRF-Token": csrfToken.value, authorization: `Bearer ${authToken.value}`, "Content-Type": "application/json" };
+              return { "X-CSRF-Token": csrfToken.value, authorization: `Bearer ${authToken.value}` };
             }
           }
         })
@@ -155,7 +155,16 @@ export default defineNuxtPlugin((nuxtApp) => {
         ]
       ]
     ]);
-    const cache = new InMemoryCache(clientConfig.inMemoryCacheOptions);
+    const cache = new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            getLastChatMessagesByChatRoom: relayStylePagination()
+          }
+        }
+      },
+      ...clientConfig.inMemoryCacheOptions
+    });
     clients[key] = new ApolloClient({
       link,
       cache,
