@@ -155,24 +155,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         ]
       ]
     ]);
-    const cache = new InMemoryCache({
-      typePolicies: {
-        Query: {
-          fields: {
-            // getLastChatMessagesByChatRoom: {
-            //   merge (existing, incoming, { readField }) {
-            //     console.log('merge', existing, incoming)
-            //     return [...(existing || []), ...(incoming || [])]
-            //   },
-            //   read (existing) {
-            //     return existing
-            //   }
-            // }
-          }
-        }
-      },
-      ...clientConfig.inMemoryCacheOptions
-    });
+    const cache = new InMemoryCache(clientConfig.inMemoryCacheOptions);
     clients[key] = new ApolloClient({
       link,
       cache,

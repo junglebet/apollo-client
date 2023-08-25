@@ -1,6 +1,6 @@
 import destr from 'destr'
 import { onError } from '@apollo/client/link/error'
-import { getMainDefinition, mergeDeep, relayStylePagination } from '@apollo/client/utilities'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { ApolloClients, provideApolloClients } from '@vue/apollo-composable'
 import { ApolloClient, ApolloLink, createHttpLink, DefaultContext, InMemoryCache, split } from '@apollo/client/core'
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
@@ -180,24 +180,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             ])
       ])
 
-    const cache = new InMemoryCache({
-      typePolicies: {
-        Query: {
-          fields: {
-            // getLastChatMessagesByChatRoom: {
-            //   merge (existing, incoming, { readField }) {
-            //     console.log('merge', existing, incoming)
-            //     return [...(existing || []), ...(incoming || [])]
-            //   },
-            //   read (existing) {
-            //     return existing
-            //   }
-            // }
-          }
-        }
-      },
-      ...clientConfig.inMemoryCacheOptions
-    })
+    const cache = new InMemoryCache(clientConfig.inMemoryCacheOptions)
 
     clients[key] = new ApolloClient({
       link,
