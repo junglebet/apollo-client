@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0-alpha.5](https://github.com/GambaLabs/apollo/compare/v6.0.0-alpha.4...v6.0.0-alpha.5) (2023-08-26)
+
 ## [6.0.0-alpha.4](https://github.com/GambaLabs/apollo/compare/v6.0.0-alpha.3...v6.0.0-alpha.4) (2023-08-26)
 
 ## [6.0.0-alpha.3](https://github.com/GambaLabs/apollo/compare/v6.0.0-alpha.2...v6.0.0-alpha.3) (2023-08-26)
