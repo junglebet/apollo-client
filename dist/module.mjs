@@ -4,8 +4,8 @@ import { defu } from 'defu';
 import { useLogger, defineNuxtModule, createResolver, addTemplate, addPlugin, addImports } from '@nuxt/kit';
 import GraphQLPlugin from '@rollup/plugin-graphql';
 
-const name = "@nuxtjs/apollo";
-const version = "5.0.0-alpha.6";
+const name = "@gambalabs/apollo";
+const version = "6.0.0-alpha.2";
 
 const logger = useLogger(name);
 async function readConfigFile(path) {
