@@ -35,7 +35,7 @@ const uploadAvatarMutation = gql`
 const data = ref<any>(null)
 const fileRef = ref<any>(null)
 
-const { mutate, onDone } = useMutation(uploadAvatarMutation, { clientId: 'gamba' })
+const { mutate, onDone } = useMutation(uploadAvatarMutation, { clientId: 'junglebet' })
 
 function uploadFile () {
   const file = fileRef.value.files[0]
