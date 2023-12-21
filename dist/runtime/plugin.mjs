@@ -2,7 +2,8 @@ import destr from "destr";
 import { onError } from "@apollo/client/link/error";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { ApolloClients, provideApolloClients } from "@vue/apollo-composable";
-import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, split } from "@apollo/client/core";
+import { ApolloClient, ApolloLink, InMemoryCache, split } from "@apollo/client/core";
+import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries";
 import { sha256 } from "crypto-hash";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
@@ -84,7 +85,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       const persistedLink = createPersistedQueryLink({ sha256, useGETForHashedQueries: true });
       baseLink = baseLink.concat(persistedLink);
     }
-    const httpEndLink = createHttpLink({
+    const httpEndLink = createUploadLink({
       ...clientConfig?.httpLinkOptions && clientConfig.httpLinkOptions,
       uri: process.client && clientConfig.browserHttpEndpoint || clientConfig.httpEndpoint,
       headers: { ...clientConfig?.httpLinkOptions?.headers || {} }

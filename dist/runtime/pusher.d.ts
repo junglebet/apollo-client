@@ -6,5 +6,5 @@ declare class PusherLink extends ApolloLink {
     subscribeToChannel(subscriptionChannel: any, event: string | undefined, observer: any): void;
     unsubscribeFromChannel(subscriptionChannel: any): void;
 }
-import { ApolloLink } from "@apollo/client/link/core";
-import { Observable } from "@apollo/client/core";
+import { ApolloLink } from '@apollo/client/core';
+import { Observable } from '@apollo/client/core';
