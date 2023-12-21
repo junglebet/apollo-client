@@ -33,8 +33,8 @@
         <template v-else-if="api === 'users'">
           <UsersDemo />
         </template>
-        <template v-else-if="api === 'gamba'">
-          <GambaDemo />
+        <template v-else-if="api === 'junglebet'">
+          <junglebetDemo />
         </template>
         <template v-else-if="api === 'file upload'">
           <FileUpload />
@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-const apis = ref(['starlink', 'todos', 'github', 'users', 'gamba', 'file upload'])
+const apis = ref(['starlink', 'todos', 'github', 'users', 'junglebet', 'file upload'])
 
 const apiCookie = useCookie('apollo_api', { default: () => apis.value[0] })
 const api = ref(apiCookie.value)
