@@ -62,7 +62,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     token.value = '<secret_token>'
   })
   nuxtApp.hook('apollo:auth', ({ client, token }) => {
-    if (client !== 'gamba') { return }
+    if (client !== 'junglebet') { return }
 
     // Pass token to the `todos` client
     token.value = '<secret_token>'
@@ -72,7 +72,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('apollo:csrf', async ({ client, token }) => {
     if (process.server) { return }
     // Check if client is app graphql, not hygraph
-    if (client !== 'gamba') { return }
+    if (client !== 'junglebet') { return }
     // NOTE: we have only one client, so no need to check client here
     const existingToken = csrfToken.value
 
