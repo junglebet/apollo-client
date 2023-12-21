@@ -65,8 +65,8 @@ subscription walletUpdated {
 }
 `
 
-const { result: data, refetch: refresh } = useQuery(gqlGames, { first: 5 }, { clientId: 'gamba' })
-const { onResult, onError, result, stop, start } = useSubscription(gqlLiveBet, null, { clientId: 'gamba' })
+const { result: data, refetch: refresh } = useQuery(gqlGames, { first: 5 }, { clientId: 'junglebet' })
+const { onResult, onError, result, stop, start } = useSubscription(gqlLiveBet, null, { clientId: 'junglebet' })
 
 const subscribe = ref(false)
 
