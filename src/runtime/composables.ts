@@ -3,9 +3,9 @@ import { print } from 'graphql'
 import type { OperationVariables, QueryOptions } from '@apollo/client'
 import type { AsyncData } from 'nuxt/dist/app/composables'
 import type { NuxtAppApollo } from '../types'
-// @ts-expect-error
+// @ts-ignore
 import { ref, useCookie, useNuxtApp, useAsyncData } from '#imports'
-// @ts-expect-error
+// @ts-ignore
 import NuxtApollo from '#build/apollo'
 
 type TQuery<T> = QueryOptions<OperationVariables, T>['query']
