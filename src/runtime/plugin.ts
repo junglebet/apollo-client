@@ -12,8 +12,9 @@ import Pusher from 'pusher-js'
 import createRestartableClient from './ws'
 import { useApollo } from './composables'
 import PusherLink from './pusher'
+// @ts-expect-error
 import { ref, useCookie, defineNuxtPlugin, useRequestHeaders } from '#imports'
-
+// @ts-expect-error
 import NuxtApollo from '#apollo'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -145,6 +146,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           disableStats: true,
           enabledTransports: ['ws', 'wss'],
           cluster: clientConfig.pusher.cluster,
+          // @ts-expect-error
           channelAuthorization: {
             endpoint: clientConfig.pusher.channelEndpoint,
             headersProvider () {
@@ -187,7 +189,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const cache = new InMemoryCache(clientConfig.inMemoryCacheOptions)
 
-    clients[key] = new ApolloClient({
+    const apolloClient = new ApolloClient({
       link,
       cache,
       ...(NuxtApollo.clientAwareness && { name: key }),
@@ -197,6 +199,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       connectToDevTools: clientConfig.connectToDevTools || false,
       defaultOptions: clientConfig?.defaultOptions
     })
+
+    nuxtApp.vueApp.provide(ApolloClient, apolloClient)
+
+    clients[key] = apolloClient
 
     if (!clients?.default && !NuxtApollo?.clients?.default && key === Object.keys(NuxtApollo.clients)[0]) {
       clients.default = clients[key]

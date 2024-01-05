@@ -1,6 +1,6 @@
 import { existsSync } from 'fs'
 import jiti from 'jiti'
-import { Ref } from 'vue'
+import type { Ref } from 'vue'
 import { defu } from 'defu'
 import { useLogger, addPlugin, addImports, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import GraphQLPlugin from '@rollup/plugin-graphql'
@@ -13,6 +13,7 @@ export type { ClientConfig, ErrorResponse }
 const logger = useLogger(name)
 
 async function readConfigFile (path: string): Promise<ClientConfig> {
+  // @ts-expect-error
   return await jiti(import.meta.url, { esmResolve: true, interopDefault: true, requireCache: false })(path)
 }
 
@@ -45,6 +46,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
       throw new Error('[@nuxtjs/apollo] Atleast one client must be configured.')
     }
 
+    // @ts-expect-error
     const { resolve } = createResolver(import.meta.url)
     const rootResolver = createResolver(nuxt.options.rootDir)
 
@@ -153,6 +155,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
       config.optimizeDeps.exclude.push('@vue/apollo-composable')
 
       config.plugins = config.plugins || []
+      // @ts-ignore
       config.plugins.push(GraphQLPlugin())
 
       if (!nuxt.options.dev) { config.define = { ...config.define, __DEV__: false } }
@@ -190,6 +193,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
 
 export const defineApolloClient = (config: ClientConfig) => config
 
+// @ts-ignore
 declare module '#app' {
   interface RuntimeConfig {
     // @ts-ignore

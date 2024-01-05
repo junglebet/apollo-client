@@ -6,7 +6,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const authToken = ref<null | string>(null)
   nuxtApp.provide('csrfToken', () => {
     const onReady = (fn: (token: string) => void) => {
-      const stopWatch = watch(
+      return watch(
         () => csrfToken.value,
         (token) => {
           if (token) {
@@ -15,7 +15,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         },
         { immediate: true }
       )
-      return stopWatch
     }
     return {
       token: csrfToken,
@@ -24,7 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
   nuxtApp.provide('authToken', () => {
     const onReady = (fn: (token: string) => void) => {
-      const stopWatch = watch(
+      return watch(
         () => authToken.value,
         (token) => {
           if (token) {
@@ -33,7 +32,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         },
         { immediate: true }
       )
-      return stopWatch
     }
     return {
       token: authToken,

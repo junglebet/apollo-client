@@ -23,8 +23,7 @@ export default defineNuxtConfig({
         }
       },
       users: {
-        // TODO: this endpoint is project case and not shared one, should be shared one once they provide
-        httpEndpoint: 'https://cold-silence-fjaidfhrsyil.vapor-farm-d1.com/graph',
+        httpEndpoint: `${process.env.GRAPHQL_BASE_URL!}/@`,
         httpLinkOptions: {
           credentials: 'include' // NOTE: this is required if cookie should be sent for different domain
         },
@@ -38,12 +37,13 @@ export default defineNuxtConfig({
         },
         persistedQueries: false,
         pusher: {
-          wsHost: process.env.PUSHER_WS_HOST!,
+          wsHost: process.env.PUSHER_HOST!,
           cluster: process.env.PUSHER_CLUSTER!,
           channelEndpoint: `${process.env.GRAPHQL_BASE_URL}/broadcasting/auth`,
           pusherAppKey: process.env.PUSHER_APP_KEY!,
           forceTLS: !!process.env.PUSHER_FORCE_TLS!,
-          wsPort: process.env.PUSHER_WS_PORT!
+          // @ts-expect-error
+          wsPort: process.env.PUSHER_PORT!
         }
       }
     }

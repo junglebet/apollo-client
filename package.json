@@ -1,6 +1,6 @@
 {
   "name": "@junglebet/apollo-client",
-  "version": "6.0.0-alpha.7",
+  "version": "v5.5.0",
   "license": "MIT",
   "repository": "https://github.com/junglebet/apollo-client",
   "homepage": "https://apollo.nuxtjs.org",
@@ -45,6 +45,7 @@
     "@nuxt/schema": "^3.8.2",
     "@nuxt/ui": "^0.4.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@types/apollo-upload-client": "^18.0.0",
     "@types/node": "^18.18.13",
     "eslint": "^8.54.0",
     "nuxt": "^3.8.2"

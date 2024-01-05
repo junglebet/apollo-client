@@ -5,7 +5,7 @@ import { useLogger, defineNuxtModule, createResolver, addTemplate, addPlugin, ad
 import GraphQLPlugin from '@rollup/plugin-graphql';
 
 const name = "@junglebet/apollo-client";
-const version = "6.0.0-alpha.7";
+const version = "v5.5.0";
 
 const logger = useLogger(name);
 async function readConfigFile(path) {

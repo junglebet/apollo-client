@@ -3,7 +3,9 @@ import { print } from 'graphql'
 import type { OperationVariables, QueryOptions } from '@apollo/client'
 import type { AsyncData } from 'nuxt/dist/app/composables'
 import type { NuxtAppApollo } from '../types'
+// @ts-expect-error
 import { ref, useCookie, useNuxtApp, useAsyncData } from '#imports'
+// @ts-expect-error
 import NuxtApollo from '#build/apollo'
 
 type TQuery<T> = QueryOptions<OperationVariables, T>['query']
@@ -98,6 +100,7 @@ export const useApollo = () => {
 
     if (skipResetStore) { return }
 
+    // eslint-disable-next-line no-console
     await nuxtApp?._apolloClients?.[client].resetStore().catch(e => console.log('%cError on cache reset', 'color: orange;', e.message))
   }
 
