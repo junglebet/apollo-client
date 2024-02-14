@@ -10,3 +10,5 @@ coverage
 .nuxt
 .output
 .env
+build
+package-lock.json

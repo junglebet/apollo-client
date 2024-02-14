@@ -13,7 +13,7 @@ export type { ClientConfig, ErrorResponse }
 const logger = useLogger(name)
 
 async function readConfigFile (path: string): Promise<ClientConfig> {
-  // @ts-expect-error
+  // @ts-ignore
   return await jiti(import.meta.url, { esmResolve: true, interopDefault: true, requireCache: false })(path)
 }
 
@@ -46,7 +46,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
       throw new Error('[@nuxtjs/apollo] Atleast one client must be configured.')
     }
 
-    // @ts-expect-error
+    // @ts-ignore
     const { resolve } = createResolver(import.meta.url)
     const rootResolver = createResolver(nuxt.options.rootDir)
 

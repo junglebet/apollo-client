@@ -122,6 +122,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           disableStats: true,
           enabledTransports: ["ws", "wss"],
           cluster: clientConfig.pusher.cluster,
+          // @ts-ignore
           channelAuthorization: {
             endpoint: clientConfig.pusher.channelEndpoint,
             headersProvider() {

@@ -42,7 +42,7 @@ export default defineNuxtConfig({
           channelEndpoint: `${process.env.GRAPHQL_BASE_URL}/broadcasting/auth`,
           pusherAppKey: process.env.PUSHER_APP_KEY!,
           forceTLS: !!process.env.PUSHER_FORCE_TLS!,
-          // @ts-expect-error
+          // @ts-ignore
           wsPort: process.env.PUSHER_PORT!
         }
       }
