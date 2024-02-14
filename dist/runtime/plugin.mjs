@@ -158,7 +158,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       ]
     ]);
     const cache = new InMemoryCache(clientConfig.inMemoryCacheOptions);
-    const apolloClient = new ApolloClient({
+    clients[key] = new ApolloClient({
       link,
       cache,
       ...NuxtApollo.clientAwareness && { name: key },
@@ -166,8 +166,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       connectToDevTools: clientConfig.connectToDevTools || false,
       defaultOptions: clientConfig?.defaultOptions
     });
-    nuxtApp.vueApp.provide(ApolloClient, apolloClient);
-    clients[key] = apolloClient;
     if (!clients?.default && !NuxtApollo?.clients?.default && key === Object.keys(NuxtApollo.clients)[0]) {
       clients.default = clients[key];
     }
