@@ -1,10 +1,11 @@
 import type { ClientOptions } from 'graphql-ws'
-import type { ApolloClient, HttpOptions, DefaultOptions, InMemoryCacheConfig, ApolloLink, RequestHandler } from '@apollo/client'
+import type { ApolloClient, DefaultOptions, HttpOptions, InMemoryCacheConfig } from '@apollo/client'
 import type { CookieOptions } from 'nuxt/dist/app/composables'
 import type { RestartableClient } from './runtime/ws'
+
 export type { ErrorResponse } from '@apollo/client/link/error'
 
-type CookieAttributes = Omit< CookieOptions, 'encode' | 'decode' | 'expires' | 'default'>;
+type CookieAttributes = Omit<CookieOptions, 'encode' | 'decode' | 'expires' | 'default'>;
 
 export type NuxtAppApollo = Partial<{
   _apolloClients?: Record<string, ApolloClient<any>>;
@@ -145,7 +146,7 @@ export interface NuxtApolloConfig<T = ClientConfig> {
   /**
    * Configuration of the Apollo clients.
    **/
-  clients?: Record< string, T extends boolean ? string | ClientConfig : ClientConfig >;
+  clients?: Record<string, T extends boolean ? string | ClientConfig : ClientConfig>;
 
   /**
    * Default options to be applied to all Apollo clients.

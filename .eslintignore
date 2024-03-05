@@ -6,3 +6,4 @@ coverage
 
 # Plugin
 lib/templates/plugin.js
+src/runtime/plugin.ts
