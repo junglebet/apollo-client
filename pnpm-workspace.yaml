@@ -1,2 +1,8 @@
 packages:
-  - "playground"
+  - playground
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - postinstall-postinstall
+  - vue-demi
+onlyBuiltDependencies:
+  - esbuild

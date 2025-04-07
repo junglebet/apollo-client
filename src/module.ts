@@ -25,7 +25,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
     version,
     configKey: 'apollo',
     compatibility: {
-      nuxt: '^3.0.0-rc.9'
+      nuxt: '^3.16.2'
     }
   },
   defaults: {
@@ -43,7 +43,7 @@ export default defineNuxtModule<NuxtApolloConfig<any>>({
   },
   async setup (options, nuxt) {
     if (!options.clients || !Object.keys(options.clients).length) {
-      throw new Error('[@nuxtjs/apollo] Atleast one client must be configured.')
+      throw new Error('[@nuxtjs/apollo] At least one client must be configured.')
     }
 
     // @ts-ignore

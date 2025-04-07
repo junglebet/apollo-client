@@ -1,8 +1,9 @@
 {
-    "private": true,
-    "version": "0.0.0",
-    "name": "nuxt-apollo-playground",
-    "dependencies": {
-      "@nuxtjs/apollo": "workspace:*"
-    }
+  "private": true,
+  "version": "0.0.0",
+  "name": "nuxt-apollo-playground",
+  "dependencies": {
+    "@nuxtjs/apollo": "workspace:*",
+    "glob-parent": "6.0.2"
   }
+}
