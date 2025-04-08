@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.5.7-alpha.0](https://github.com/junglebet/apollo-client/compare/v6.0.0-alpha.8...v5.5.7-alpha.0) (2025-04-08)
+
 ## [6.0.0-alpha.8](https://github.com/junglbet/apollo/compare/v6.0.0-alpha.7...v6.0.0-alpha.8) (2023-12-21)
 
 ## [6.0.0-alpha.7](https://github.com/junglbet/apollo/compare/v6.0.0-alpha.6...v6.0.0-alpha.7) (2023-08-26)
