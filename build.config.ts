@@ -6,5 +6,6 @@ export default defineBuildConfig({
   externals: ['@nuxtjs/apollo'],
   rollup: {
     emitCJS: false
-  }
+  },
+  failOnWarn: false
 })

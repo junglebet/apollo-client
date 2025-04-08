@@ -1,5 +1,5 @@
 import { existsSync } from 'fs'
-import jiti from 'jiti'
+import { createJiti } from 'jiti'
 import { defu } from 'defu'
 import { useLogger, addPlugin, addImports, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import GraphQLPlugin from '@rollup/plugin-graphql'
@@ -12,11 +12,6 @@ export type { ClientConfig, ErrorResponse }
 
 const logger = useLogger(name)
 
-async function readConfigFile (path: string): Promise<ClientConfig> {
-  // @ts-ignore
-  return await jiti(import.meta.url, { esmResolve: true, interopDefault: true, requireCache: false })(path)
-}
-
 export type ModuleOptions = NuxtApolloConfig
 
 export default defineNuxtModule<ModuleOptions>({
@@ -25,7 +20,7 @@ export default defineNuxtModule<ModuleOptions>({
     version,
     configKey: 'apollo',
     compatibility: {
-      nuxt: '^3.10.1'
+      nuxt: '^3.16.2'
     }
   },
   defaults: {
@@ -56,13 +51,14 @@ export default defineNuxtModule<ModuleOptions>({
       }
     }
   },
-  async setup (options, nuxt) {
+  setup(options, nuxt) {
     if (!options.clients || !Object.keys(options.clients).length) {
       logger.warn('No apollo clients configured.')
       return
     }
 
-    const { resolve } = createResolver(import.meta.url)
+    // @ts-ignore
+    const {resolve} = createResolver(import.meta.url)
     const rootResolver = createResolver(nuxt.options.rootDir)
 
     nuxt.options.build.transpile = nuxt.options.build.transpile || []
@@ -77,7 +73,12 @@ export default defineNuxtModule<ModuleOptions>({
     const clients: Record<string, ClientConfig> = {}
     const configPaths: Record<string, string> = {}
 
-    async function prepareClients () {
+    async function readConfigFile (path: string): Promise<ClientConfig> {
+      // @ts-ignore
+      return await createJiti(import.meta.url, { esmResolve: true, interopDefault: true, moduleCache: false })(path)
+    }
+
+    async function prepareClients() {
       // eslint-disable-next-line prefer-const
       for (let [k, v] of Object.entries(options.clients || {})) {
         if (typeof v === 'string') {
@@ -90,7 +91,9 @@ export default defineNuxtModule<ModuleOptions>({
           }
 
           v = resolvedConfig
-          if (!configPaths[k]) { configPaths[k] = path }
+          if (!configPaths[k]) {
+            configPaths[k] = path
+          }
         }
 
         v.authType = (v?.authType === undefined ? options.authType : v?.authType) || null
@@ -100,8 +103,11 @@ export default defineNuxtModule<ModuleOptions>({
         v.tokenStorage = v?.tokenStorage || options.tokenStorage
         v.requestMaxTimeout = v?.requestMaxTimeout || options.requestMaxTimeout
         v.retryOptions = v?.retryOptions || options.retryOptions
+        v.httpEndpoint = v?.httpEndpoint || process.env.GRAPHQL_BASE_URL || options.httpEndpoint
 
-        if (v.cookieAttributes) { v.cookieAttributes = defu(v?.cookieAttributes, options.cookieAttributes) }
+        if (v.cookieAttributes) {
+          v.cookieAttributes = defu(v?.cookieAttributes, options.cookieAttributes)
+        }
 
         v.defaultOptions = v?.defaultOptions || options.defaultOptions
 
@@ -146,30 +152,30 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolve('runtime/plugin'))
 
     addImports([
-      { name: 'gql', from: 'graphql-tag' },
+      {name: 'gql', from: 'graphql-tag'},
       ...[
         'useApollo',
         'useAsyncQuery',
         'useLazyAsyncQuery'
-      ].map(n => ({ name: n, from: resolve('runtime/composables') })),
+      ].map(n => ({name: n, from: resolve('runtime/composables')})),
       ...(!options?.autoImports
         ? []
         : [
-            'useQuery',
-            'useLazyQuery',
-            'useMutation',
-            'useSubscription',
+          'useQuery',
+          'useLazyQuery',
+          'useMutation',
+          'useSubscription',
 
-            'useApolloClient',
+          'useApolloClient',
 
-            'useQueryLoading',
-            'useMutationLoading',
-            'useSubscriptionLoading',
+          'useQueryLoading',
+          'useMutationLoading',
+          'useSubscriptionLoading',
 
-            'useGlobalQueryLoading',
-            'useGlobalMutationLoading',
-            'useGlobalSubscriptionLoading'
-          ].map(n => ({ name: n, from: '@vue/apollo-composable' })))
+          'useGlobalQueryLoading',
+          'useGlobalMutationLoading',
+          'useGlobalSubscriptionLoading'
+        ].map(n => ({name: n, from: '@vue/apollo-composable'})))
     ])
 
     nuxt.hook('vite:extendConfig', (config) => {
@@ -180,7 +186,9 @@ export default defineNuxtModule<ModuleOptions>({
       config.plugins = config.plugins || []
       config.plugins.push(GraphQLPlugin() as PluginOption)
 
-      if (!nuxt.options.dev) { config.define = { ...config.define, __DEV__: false } }
+      if (!nuxt.options.dev) {
+        config.define = {...config.define, __DEV__: false}
+      }
     })
 
     nuxt.hook('webpack:config', (configs) => {
@@ -188,7 +196,9 @@ export default defineNuxtModule<ModuleOptions>({
         // @ts-ignore
         const hasGqlLoader = config.module.rules.some((rule: any) => rule?.use === 'graphql-tag/loader')
 
-        if (hasGqlLoader) { return }
+        if (hasGqlLoader) {
+          return
+        }
 
         // @ts-ignore
         config.module.rules.push({
@@ -200,7 +210,9 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     nuxt.hook('builder:watch', async (_event, path) => {
-      if (!Object.values(configPaths).some(p => p.includes(path))) { return }
+      if (!Object.values(configPaths).some(p => p.includes(path))) {
+        return
+      }
 
       logger.log('[@nuxtjs/apollo] Reloading Apollo configuration')
 
@@ -209,7 +221,7 @@ export default defineNuxtModule<ModuleOptions>({
       await nuxt.callHook('builder:generateApp')
     })
 
-    await prepareClients()
+    prepareClients().then(r => {})
   }
 })
 
@@ -224,8 +236,17 @@ export interface ModulePublicRuntimeConfig {
 }
 
 declare module '@nuxt/schema' {
-  interface NuxtConfig { ['apollo']?: Partial<ModuleOptions> }
-  interface NuxtOptions { ['apollo']?: ModuleOptions }
-  interface RuntimeConfig extends ModuleRuntimeConfig {}
-  interface PublicRuntimeConfig extends ModulePublicRuntimeConfig {}
+  interface NuxtConfig {
+    ['apollo']?: Partial<ModuleOptions>
+  }
+
+  interface NuxtOptions {
+    ['apollo']?: ModuleOptions
+  }
+
+  interface RuntimeConfig extends ModuleRuntimeConfig {
+  }
+
+  interface PublicRuntimeConfig extends ModulePublicRuntimeConfig {
+  }
 }

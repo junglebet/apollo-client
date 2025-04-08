@@ -60,5 +60,6 @@ export default defineNuxtConfig({
     public: {
       graphqlBaseUrl: process.env.GRAPHQL_BASE_URL
     }
-  }
+  },
+  compatibilityDate: '2025-04-08'
 })
