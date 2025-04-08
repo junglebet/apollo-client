@@ -1,8 +1,10 @@
 export default defineNuxtConfig({
+  devtools: { enabled: true },
+
   modules: ['@nuxt/ui', '@nuxtjs/apollo'],
 
   colorMode: {
-    preference: 'light',
+    preference: 'dark',
     storageKey: 'na-color-scheme'
   },
 
@@ -12,38 +14,44 @@ export default defineNuxtConfig({
       default: './apollo/default.ts',
       github: {
         httpEndpoint: 'https://api.github.com/graphql',
-        tokenStorage: 'localStorage'
+        tokenStorage: 'cookie'
       },
       todos: {
-        httpEndpoint: 'https://nuxt-gql-server-2gl6xp7kua-ue.a.run.app/query',
-        wsEndpoint: 'wss://nuxt-gql-server-2gl6xp7kua-ue.a.run.app/query',
+        httpEndpoint: `${process.env.GRAPHQL_BASE_URL!}/query`,
+        wsEndpoint: 'wss://wss.junglebet.com/query',
+        defaultOptions: {
+          watchQuery: {
+            fetchPolicy: 'cache-and-network'
+          }
+        },
         httpLinkOptions: {
           headers: {
+            'X-CUSTOM-HEADER': '123'
           }
         }
       },
       users: {
         httpEndpoint: `${process.env.GRAPHQL_BASE_URL!}/@`,
         httpLinkOptions: {
-          credentials: 'include' // NOTE: this is required if cookie should be sent for different domain
+          credentials: 'include'
         },
-        // NOTE: `X-CSRF-TOKEN` is default csrfHeader
         csrfHeader: 'X-CSRF-TOKEN'
       },
       junglebet: {
-        httpEndpoint: `${process.env.GRAPHQL_BASE_URL}/@`,
+        httpEndpoint: `${process.env.GRAPHQL_BASE_URL!}/@`,
         httpLinkOptions: {
           credentials: 'include'
         },
         persistedQueries: false,
+        requestMaxTimeout: 7000,
         pusher: {
           wsHost: process.env.PUSHER_HOST!,
           cluster: process.env.PUSHER_CLUSTER!,
-          channelEndpoint: `${process.env.GRAPHQL_BASE_URL}/broadcasting/auth`,
+          channelEndpoint: `${process.env.GRAPHQL_BASE_URL!}/broadcasting/auth`,
           pusherAppKey: process.env.PUSHER_APP_KEY!,
           forceTLS: !!process.env.PUSHER_FORCE_TLS!,
-          // @ts-ignore
-          wsPort: process.env.PUSHER_PORT!
+          activityTimeout: 6000,
+          wsPort: Number(process.env.PUSHER_PORT)!
         }
       }
     }

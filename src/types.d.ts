@@ -1,16 +1,9 @@
 import type { ClientOptions } from 'graphql-ws'
-import type { ApolloClient, DefaultOptions, HttpOptions, InMemoryCacheConfig } from '@apollo/client'
-import type { CookieOptions } from 'nuxt/dist/app/composables'
-import type { RestartableClient } from './runtime/ws'
-
+import type { HttpOptions, DefaultOptions, InMemoryCacheConfig } from '@apollo/client'
+import type { CookieOptions } from 'nuxt/app'
 export type { ErrorResponse } from '@apollo/client/link/error'
 
-type CookieAttributes = Omit<CookieOptions, 'encode' | 'decode' | 'expires' | 'default'>;
-
-export type NuxtAppApollo = Partial<{
-  _apolloClients?: Record<string, ApolloClient<any>>;
-  _apolloWsClients?: Record<string, RestartableClient>;
-}>;
+type CookieAttributes = Omit< CookieOptions, 'encode' | 'decode' | 'expires' | 'default'>;
 
 export type Pusher = {
   cluster: string;
@@ -19,6 +12,19 @@ export type Pusher = {
   forceTLS: boolean;
   channelEndpoint: string;
   pusherAppKey: string;
+  activityTimeout: number;
+}
+
+export type RetryOptions = {
+  delay: {
+    initial: number
+    max: number
+    jitter: boolean
+  }
+  attempts: {
+    max: number
+    retryIf: (error: any, operation: any) => boolean
+  }
 }
 
 export type ClientConfig = {
@@ -128,14 +134,27 @@ export type ClientConfig = {
   csrfHeader?: string
 
   /**
+   * Request maximum timeout.
+   * @type {number}
+   * @default 7000
+   */
+  requestMaxTimeout?: number
+
+  /**
    * Enable automatic persisted queries.
    * @type {boolean}
    * @default false
    */
   persistedQueries?: boolean
+
+  /**
+   * options for Retry link
+   */
+
+  retryOptions?: Partial<RetryOptions>
 };
 
-export interface NuxtApolloConfig<T = ClientConfig> {
+export interface NuxtApolloConfig<T = false> {
   /**
    * Determine if vue-apollo composables should be automatically imported.
    * @type {boolean}
@@ -146,7 +165,7 @@ export interface NuxtApolloConfig<T = ClientConfig> {
   /**
    * Configuration of the Apollo clients.
    **/
-  clients?: Record<string, T extends boolean ? string | ClientConfig : ClientConfig>;
+  clients?: Record< string, T extends false ? string | ClientConfig : ClientConfig >;
 
   /**
    * Default options to be applied to all Apollo clients.
@@ -184,6 +203,13 @@ export interface NuxtApolloConfig<T = ClientConfig> {
   csrfHeader?: string;
 
   /**
+   * Request maximum timeout.
+   * @type {number}
+   * @default 7000
+   */
+  requestMaxTimeout?: number
+
+  /**
    * Specify if the auth token should be stored in `cookie` or `localStorage`.
    * `Cookie` storage is required for SSR.
    * @type {string}
@@ -204,4 +230,9 @@ export interface NuxtApolloConfig<T = ClientConfig> {
    * @default false
    */
   clientAwareness?: boolean
+
+  /**
+   * options for Retry link
+   */
+  retryOptions?: Partial<RetryOptions>
 }

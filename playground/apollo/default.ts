@@ -1,5 +1,3 @@
-import { ApolloLink } from '@apollo/client/core'
-// eslint-disable-next-line import/named
 import { defineApolloClient } from '@nuxtjs/apollo'
 
 export default defineApolloClient({

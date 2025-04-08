@@ -13,7 +13,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             fn(token)
           }
         },
-        { immediate: true }
+        {immediate: true}
       )
     }
     return {
@@ -30,9 +30,10 @@ export default defineNuxtPlugin((nuxtApp) => {
             fn(token)
           }
         },
-        { immediate: true }
+        {immediate: true}
       )
     }
+
     return {
       token: authToken,
       onReady
@@ -67,29 +68,29 @@ export default defineNuxtPlugin((nuxtApp) => {
     authToken.value = '<secret_token>'
   })
 
-  nuxtApp.hook('apollo:csrf', async ({ client, token }) => {
+  nuxtApp.hook('apollo:csrf', async ({ client, token, forceUpdate }) => {
     if (process.server) { return }
     // Check if client is app graphql, not hygraph
     if (client !== 'junglebet') { return }
     // NOTE: we have only one client, so no need to check client here
     const existingToken = csrfToken.value
 
-    if (existingToken) {
+    if (existingToken && !forceUpdate) {
       token.value = existingToken
       return
     }
-
     const res = await fetchCsrf.catch(() => false)
     if (!res) {
       console.error('Failed to fetch csrf token')
       return
     }
-    // TODO: need to handle expire time
+
     token.value = csrfToken.value
   })
 
   // Nuxt Apollo error hook
   nuxtApp.hook('apollo:error', (error: ErrorResponse) => {
+    // eslint-disable-next-line no-console
     console.log('Apollo Error Handler', error)
   })
 })

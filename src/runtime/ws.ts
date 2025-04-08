@@ -23,7 +23,7 @@ export default function createRestartableClient (options: ClientOptions): Restar
             // if the socket is still open for the restart, do the restart
             socket.close(4205, 'Client Restart')
           } else {
-            // otherwise the socket might've closed, indicate that you want
+            // otherwise, the socket might've closed, indicate that you want
             // a restart on the next opened event
             restartRequested = true
           }
